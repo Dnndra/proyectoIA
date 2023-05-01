@@ -5,7 +5,11 @@
   <artifactId>proyecto-ia</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
-  <name>proyecto-ia</name>
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
+    <name>proyecto-ia</name>
   <url>http://maven.apache.org</url>
   <dependencies>
     <dependency>
