@@ -9,8 +9,5 @@
         <module name="proyecto-ia" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="proyecto-ia" target="17" />
-    </bytecodeTargetLevel>
   </component>
 </project>

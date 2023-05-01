@@ -5,6 +5,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.annotations.NotNull;
 
+import javax.security.auth.callback.Callback;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -21,7 +22,7 @@ public class Reader {
         HashMap<String, List<Word>> words = new HashMap<String,List<Word> >();
         BufferedReader reader = null;
         try {
-            FireBaseService fireBaseService = new FireBaseService();
+            //FireBaseService fireBaseService = new FireBaseService();
             reader = new BufferedReader(new FileReader(path));
             String line;
             while ((line = reader.readLine()) != null) {
@@ -40,27 +41,27 @@ public class Reader {
 //                System.out.println(normalized_string);
 //                System.out.println(normalized_tag);
                 var splitted = normalized_string.split("\s");
-                var tags = fireBaseService.db.getReference("etiqueta");
-                Query query;
-
-                query = tags.child(normalized_tag).equalTo("OK").limitToFirst(1);
-                query.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.exists()){
-                            
-                        }else{
-
+                //var tags = fireBaseService.db.getReference("etiqueta");
+                List<Word> wordList = new ArrayList<>();
+                for (var word: splitted ) {
+                    if(words.containsKey(normalized_tag)){
+                        wordList = words.get(normalized_tag);
+                    }
+                    var existe = false;
+                    for (var w: wordList ) {
+                        if(w.value.equals(word)){
+                            w.count++;
+                            existe = true;
                         }
-
                     }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
+                    if(!existe){
+                        wordList.add(new Word(normalized_tag,word,1));
                     }
-                });
+                }
+                words.put(normalized_tag, wordList);
+
             }
+            System.out.println("Aprendizaje finalizado");
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -74,5 +75,6 @@ public class Reader {
         }
 
     }
+
 
 }
