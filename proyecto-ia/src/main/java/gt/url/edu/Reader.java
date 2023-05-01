@@ -17,12 +17,12 @@ import java.util.List;
 
 public class Reader {
 
-    public void training(String path){
+    public HashMap<String, List<Word>> training(String path){
 
         HashMap<String, List<Word>> words = new HashMap<String,List<Word> >();
         BufferedReader reader = null;
         try {
-            //FireBaseService fireBaseService = new FireBaseService();
+            
             reader = new BufferedReader(new FileReader(path));
             String line;
             while ((line = reader.readLine()) != null) {
@@ -73,7 +73,7 @@ public class Reader {
                 e.printStackTrace();
             }
         }
-
+        return words;
     }
 
 
