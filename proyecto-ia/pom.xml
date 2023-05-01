@@ -12,6 +12,13 @@
     <name>proyecto-ia</name>
   <url>http://maven.apache.org</url>
   <dependencies>
+
+    <dependency>
+      <groupId>com.google.firebase</groupId>
+      <artifactId>firebase-admin</artifactId>
+      <version>7.2.0</version>
+    </dependency>
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

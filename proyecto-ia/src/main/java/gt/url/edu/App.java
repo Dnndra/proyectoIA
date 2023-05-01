@@ -1,13 +1,19 @@
 package gt.url.edu;
 
-/**
- * Hello world!
- *
- */
+import com.google.firebase.database.*;
+
+import java.io.IOException;
+import java.util.HashMap;
+
 public class App 
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
+
+
+        Reader reader = new Reader();
+        reader.training("C:\\Repos\\util\\ejemplopalabras.txt");
+
+
     }
 }
