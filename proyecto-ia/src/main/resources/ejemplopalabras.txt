@@ -1,0 +1,7 @@
+congratulation you are selected | ham
+congrats you won the lottery | spam
+travel for free | spam
+selected for credit cards | spam
+very good | ham
+good night | ham
+lottery | spam
