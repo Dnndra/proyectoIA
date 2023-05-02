@@ -10,17 +10,29 @@ public class App {
     public static void main(String[] args) {
         Reader reader = new Reader();
         HashMap<String, List<Word>> dataSet = new HashMap<String, List<Word>>();
-        dataSet = reader.training(
-                "C:\\Users\\Juan González\\Documents\\IA\\proyectoIA\\proyecto-ia\\src\\main\\resources\\ejemplopalabras.txt",
-                dataSet);
         Scanner scanner = new Scanner(System.in);
         String input = "";
+        System.out.print("Por favor ingrese el path del archivo>");
+        input = scanner.nextLine();
+        dataSet = reader.training(
+                input,
+                dataSet);
+
         while (!input.equals("exit")) {
             System.out.print("Por favor ingrese la cadena >");
             input = scanner.nextLine();
+            if (input.equals("reentrenar")){
+                System.out.print("Por favor ingrese el path >");
+                input = scanner.nextLine();
+                dataSet = reader.training(input,   dataSet);
+                continue;
+
+
+            }
             if (input.equals("exit")) {
                 break;
             }
+
             removePunctuation(input);
             var normalized_string = Normalizer.normalize(input, Normalizer.Form.NFD)
                     .replaceAll("[^\\p{ASCII}]", "").toLowerCase().trim().split("\s");

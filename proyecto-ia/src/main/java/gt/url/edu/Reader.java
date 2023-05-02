@@ -12,7 +12,7 @@ import java.util.List;
 public class Reader {
 
     private Integer Palabras;
-
+   public HashSet<String> hashSet = new HashSet<String>();
     public Integer getPalabras() {
         return Palabras;
     }
@@ -27,7 +27,7 @@ public class Reader {
     }
 
     public HashMap<String, List<Word>> training(String path, HashMap<String, List<Word>> words) {
-        HashSet<String> hashSet = new HashSet<String>();
+
         BufferedReader reader = null;
         try {
 
@@ -77,4 +77,6 @@ public class Reader {
         Palabras = hashSet.size();
         return words;
     }
+
+
 }
