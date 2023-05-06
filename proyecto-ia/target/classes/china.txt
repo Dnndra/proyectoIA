@@ -1,0 +1,4 @@
+Chinese Beijing Chinese | yes
+Chinese Chinese Shanghai | yes
+Chinese Macao | yes
+Tokyo Japan Chinese | no

@@ -12,7 +12,8 @@ import java.util.List;
 public class Reader {
 
     private Integer Palabras;
-   public HashSet<String> hashSet = new HashSet<String>();
+    public HashSet<String> hashSet = new HashSet<String>();
+    public HashMap<String, Integer> hashMap = new HashMap<String, Integer>();  
     public Integer getPalabras() {
         return Palabras;
     }
@@ -39,12 +40,20 @@ public class Reader {
 
                 var normalized_string = Normalizer.normalize(linea[0], Normalizer.Form.NFD)
                         .replaceAll("[^\\p{ASCII}]", "").toLowerCase().trim();
-                var normalized_tag = Normalizer.normalize(linea[1], Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "")
-                        .toLowerCase().trim();
+                var normalized_tag = Normalizer.normalize(linea[1], Normalizer.Form.NFD)
+                        .replaceAll("[^\\p{ASCII}]", "").toLowerCase().trim();
 
+                if (words.containsKey(normalized_tag)) {
+                    hashMap.put(normalized_tag, hashMap.get(normalized_tag) + 1);
+                }
+                else {
+                    hashMap.put(normalized_tag, 1);
+                }
                 var splitted = normalized_string.split("\s");
                 List<Word> wordList = new ArrayList<>();
                 for (var word : splitted) {
+                    if (word == "")
+                        continue;
                     if (words.containsKey(normalized_tag)) {
                         wordList = words.get(normalized_tag);
                     }
@@ -77,6 +86,4 @@ public class Reader {
         Palabras = hashSet.size();
         return words;
     }
-
-
 }

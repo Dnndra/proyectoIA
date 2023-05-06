@@ -1,5 +1,7 @@
 package gt.url.edu;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.Normalizer;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +19,6 @@ public class App {
         dataSet = reader.training(
                 input,
                 dataSet);
-
         while (!input.equals("exit")) {
             System.out.print("Por favor ingrese la cadena >");
             input = scanner.nextLine();
@@ -26,8 +27,6 @@ public class App {
                 input = scanner.nextLine();
                 dataSet = reader.training(input,   dataSet);
                 continue;
-
-
             }
             if (input.equals("exit")) {
                 break;
@@ -38,12 +37,21 @@ public class App {
                     .replaceAll("[^\\p{ASCII}]", "").toLowerCase().trim().split("\s");
             var trueEtiqueta = "";
             var falseEtiqueta = "";
-            Double trueProbabilidad = 0.0;
-            Double falseProbabilidad = 1.0;
+            BigDecimal trueProbabilidad = BigDecimal.ZERO;
+            BigDecimal falseProbabilidad = BigDecimal.ONE;
+            BigDecimal normalizador = BigDecimal.ZERO;
 
-            // P (youlo | ham) = (1 + 1)/ (7 + 15)
+            Integer i = 0;
+            for (var V : reader.hashMap.values()) {
+                i += V;
+            } 
             for (var etiqueta : dataSet.entrySet()) {
-                falseProbabilidad = 1.0;
+                BigDecimal j = new BigDecimal(reader.hashMap.get(etiqueta.getKey()));
+                falseProbabilidad = j.divide(new BigDecimal(i), 10, RoundingMode.HALF_EVEN);
+                Integer k = 0;
+                for (var K : dataSet.get(etiqueta.getKey())) {
+                    k += K.count;
+                }
                 for (var texto : normalized_string) {
                     falseEtiqueta = etiqueta.getKey();
                     Word valor = null;
@@ -51,22 +59,23 @@ public class App {
                     stream = etiqueta.getValue().stream().filter(x -> x.value.equals(texto)).findFirst();
                     if (!stream.isEmpty()) {
                         valor = stream.get();
-                        Double x = Double.parseDouble(valor.count.toString());
-                        Double y = Double.parseDouble(String.valueOf(etiqueta.getValue().size()));
-                        Double n = Double.parseDouble(reader.getPalabras().toString());
-                        falseProbabilidad *= (x + 1) / (y + n);
+                        BigDecimal x = new BigDecimal(valor.count.toString());
+                        BigDecimal y = new BigDecimal(k);
+                        BigDecimal n = new BigDecimal(reader.getPalabras().toString());
+                        falseProbabilidad = falseProbabilidad.multiply(x.add(BigDecimal.ONE).divide(y.add(n), 10, RoundingMode.HALF_EVEN));
                     } else {
-                        Double y = Double.parseDouble(String.valueOf(etiqueta.getValue().size()));
-                        Double n = Double.parseDouble(reader.getPalabras().toString());
-                        falseProbabilidad *= (0 + 1) / (y + n);
+                        BigDecimal y = new BigDecimal(k);
+                        BigDecimal n = new BigDecimal(reader.getPalabras().toString());
+                        falseProbabilidad = falseProbabilidad.multiply(BigDecimal.ONE.divide(y.add(n), 10, RoundingMode.HALF_EVEN));
                     }
                 }
-                if (trueProbabilidad < falseProbabilidad) {
+                if (trueProbabilidad.compareTo(falseProbabilidad) == -1) {
                     trueEtiqueta = falseEtiqueta;
                     trueProbabilidad = falseProbabilidad;
                 }
+                normalizador = normalizador.add(falseProbabilidad);
             }
-            System.out.println(input + " pertenece a " + trueEtiqueta + " con una probabilidad de " + trueProbabilidad);
+            System.out.println(input + " pertenece a " + trueEtiqueta + " con una probabilidad de " + trueProbabilidad/*.divide(normalizador, 10, RoundingMode.HALF_EVEN).multiply(new BigDecimal("100.00")) + " %"*/);
         }
         scanner.close();
     }
